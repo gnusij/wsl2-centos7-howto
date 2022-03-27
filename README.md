@@ -11,23 +11,59 @@
 
 ### Xming
 
-```sh
-sudo yum -y install xrdp
-sudo mv /usr/bin/systemctl /usr/bin/systemctl.old
-sudo curl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py > /usr/bin/systemctl
-sudo chmod +x /usr/bin/systemctl
-sudo systemctl start xrdp
-```
+#### Windows10 Setup on **Private Network**
 
-Add this to `~/.bashrc`
-```sh
-export DISPLAY=$(cd /mnt/c && route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.0
-```
+Allow Plubic inbound connection for both Xming Servers
 
-**Only on Private Network**, launch Xming with `-ac` option.
-```
-"C:\Program Files (x86)\Xming\Xming.exe" :0 -clipboard -multiwindow -ac
-```
+1. From **Windows Defender Firewall** -> **Advanced Setting** -> **Inbound Rules**, double click the inbound rule to open up properties. 
+
+    ![Enable Inbound Rules for Both Public Xming X Servers](docs/XmingFirewall0.png)
+
+2. Under **General** Tab and **Action Panel**, select **Allow the connection**.
+
+    ![Select Allow the connection under Action panel on General Tab](docs/XmingFirewall1.png)
+
+Create a new rule to restrict TCP 6000 connection to X11 on WSL2
+
+1. Under **Actions** menu, click **New Rule...** 
+
+2. You will be asked to select **Rule Type**. Select **Port**.
+
+3. For **Protocol and Ports**, select **TCP** and specific local port **6000**
+
+4. Proceed with default or desired options and give this rule a name, for example: "TCP 6000 for X11 on WSL"
+
+5. Edit properties of this newly create rule ("TCP 6000 for X11 on WSL"). Under **Scope** tab **Remote IP address** panel, select **Theses IP addresses** then **Add** IP address **172.16.0.0/12**. 
+
+    ![Add 172.16.0.0/12 to Remote IP address under Scope tab](docs/XmingFirewall2.png)
+
+6. **!!ONLY ON PRIVATE NETWORK!!**, Launch Xming with `-ac` option. 
+    
+    ```
+    "C:\Program Files (x86)\Xming\Xming.exe" :0 -clipboard -multiwindow -ac
+    ```
+
+#### CentOS7 WSL2 Setup
+
+1. Install `xrdp`
+
+    ```sh
+    sudo yum -y install xrdp
+    ```
+
+2. Apply some hack to change permission on systemctl on WSL2. `systemctl` is disabled by default.  
+
+    ```sh
+    sudo mv /usr/bin/systemctl /usr/bin/systemctl.old
+    sudo curl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py > /usr/bin/systemctl
+    sudo chmod +x /usr/bin/systemctl
+    sudo systemctl start xrdp
+    ```
+
+3. Add this to `~/.bashrc`
+    ```sh
+    echo "export DISPLAY=$(cd /mnt/c && route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.0" > ~/.bashrc
+    ```
 
 ## CentOS7 Basics
 
@@ -77,24 +113,26 @@ Find a `THING` from installable list
 yum -y list | grep 'THING' 
 ```
 
-Typical Dev environment
+Typical dev environment
 ```sh
 yum -y groupinstall "Development Tools"
 yum -y install gcc openssl-devel bzip2-devel libffi-devel wget
 ```
 
 #### Git
+
 Upgrade Git to latest version
 ```
 yum -y remove git*
 yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
 yum -y install git
-
 ```
+
 Change default branch name to main
 ```sh
 git config --global init.defaultBranch main
 ```
+
 #### Python
 
 ```
