@@ -62,7 +62,7 @@ Create a new rule to restrict TCP 6000 connection to X11 on WSL2
 
 3. Add this to `~/.bashrc`
     ```sh
-    echo "export DISPLAY=$(cd /mnt/c && route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.0" > ~/.bashrc
+    echo "export DISPLAY=$(cd /mnt/c && route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.0" >> ~/.bashrc
     ```
 
 ## CentOS7 Basics
@@ -135,10 +135,10 @@ git config --global init.defaultBranch main
 
 #### Python
 
-```
+```sh
 sudo yum -y install centos-release-scl-rh
 sudo yum -y install rh-python38
 sudo yum -y install rh-python38-python-devel rh-python38-python-tkinter rh-python38-python-numpy rh-python38-python-jinja2 rh-python38-python-scipy
 source scl_source enable rh-python38
-echo "source scl_source enable rh-python38" > ~/.bashrc
+echo "source scl_source enable rh-python38" >> ~/.bashrc
 ```
