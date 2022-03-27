@@ -84,7 +84,7 @@ Add `USER` to `GROUP`.
 usermod -aG GROUP USER
 ```
 
-Grant **sudo** privileges to `USER` by adding the user to the `wheel` group
+Grant `sudo` privileges to `USER` by adding the user to the `wheel` group
 ```sh
 usermod -aG wheel USER
 ```
@@ -116,7 +116,7 @@ yum -y list | grep 'THING'
 Typical dev environment
 ```sh
 yum -y groupinstall "Development Tools"
-yum -y install gcc openssl-devel bzip2-devel libffi-devel wget
+yum -y install gcc openssl-devel bzip2-devel libffi-devel wget epel-release
 ```
 
 #### Git
