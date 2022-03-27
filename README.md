@@ -7,7 +7,7 @@
     - [CentOS-WSL](https://github.com/mishamosher/CentOS-WSL) (by [mishamosher](https://github.com/mishamosher)) : CentOS based on qcow2 image
     - [FedoraWSL](https://github.com/yosukes-dev/FedoraWSL) (by [yosukes-dev](https://github.com/yosukes-dev)) : Fedora on WSL
     - [RHWSL](https://github.com/yosukes-dev/RHWSL) (by [yosukes-dev](https://github.com/yosukes-dev) : RedHat UBI on WSL
-3. Download and run included exe file
+3. Download and run the included exe file
 
 ### Xming
 
@@ -51,7 +51,7 @@ Create a new rule to restrict TCP 6000 connection to X11 on WSL2
     sudo yum -y install xrdp
     ```
 
-2. Apply some hack to change permission on systemctl on WSL2. `systemctl` is disabled by default.  
+2. Apply some hack to change permission on `systemctl` on WSL2. `systemctl` is disabled by default.  
 
     ```sh
     sudo mv /usr/bin/systemctl /usr/bin/systemctl.old
