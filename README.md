@@ -142,3 +142,58 @@ sudo yum -y install rh-python38-python-devel rh-python38-python-tkinter rh-pytho
 source scl_source enable rh-python38
 echo "source scl_source enable rh-python38" >> ~/.bashrc
 ```
+
+#### SGE
+
+Is this even possible on WSL?
+
+[https://github.com/grisu48/gridengine](https://github.com/grisu48/gridengine)
+
+```
+sudo yum -y install csh java-1.8.0-openjdk java-1.8.0-openjdk-devel gcc ant automake hwloc-devel openssl-devel libdb-devel pam-devel libXt-devel motif-devel ncurses-libs ncurses-devel libgnat
+```
+
+Change `/etc/wsl.conf`
+```
+[network]
+hostname = centos7
+generateHosts = false
+```
+
+Change `/etc/hosts`
+```
+127.0.0.1       localhost
+127.0.1.1       centos7.localdomain     centos7
+```
+
+Build [Reference](https://feldspaten.org/2019/02/04/gridengine-and-centos-7/)
+
+```
+git clone https://github.com/grisu48/gridengine.git
+cd gridengine/sge-8.1.9/source
+./scripts/bootstrap.sh
+./aimk -no-herd -no-java
+sudo mkdir /opt/sge
+sudo SGE_ROOT="/opt/sge" scripts/distinst -local -allall -noexit       # asks for confirmation
+export SGE_ROOT="/opt/sge"
+echo "export SGE_ROOT='/opt/sge'" >> ~/.bashrc
+cd $SGE_ROOT
+
+./install_qmaster        # On the Master Host
+./install_execd          # On the execution host (Compute node)
+```
+
+There's a problem with using locahost when installing `./install_qmaster`
+
+```
+Hostname: centos7.localdomain
+Aliases: centos7
+Host Address(es): 127.0.1.1
+
+It is not supported for a Grid Engine installation that the local hostname
+contains the hostname "localhost" and/or the IP address "127.0.x.x" of the
+loopback interface.
+The "localhost" hostname should be reserved for the loopback interface
+("127.0.0.1") and the real hostname should be assigned to one of the
+physical or logical network interfaces of this machine.
+```
