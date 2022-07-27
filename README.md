@@ -175,7 +175,9 @@ Create a new rule to restrict TCP 6000 connection to X11 on WSL2
     "C:\Program Files (x86)\Xming\Xming.exe" :0 -clipboard -multiwindow -ac
     ```
 
-1. Install `xrdp` if you are using Xming.
+CentOS Setup:
+
+1. Install `xrdp` 
 
     ```sh
     sudo yum -y install xrdp
@@ -187,7 +189,7 @@ Create a new rule to restrict TCP 6000 connection to X11 on WSL2
     sudo systemctl start xrdp
     ```
 
-3. Add this to `~/.bashrc`
+3. Setup `.bashrc` to automatically set `DISPLAY`:
     ```sh
     echo "export DISPLAY=$(cd /mnt/c && route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.0" >> ~/.bashrc
     ```
